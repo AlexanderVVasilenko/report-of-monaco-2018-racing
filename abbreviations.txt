@@ -1,0 +1,20 @@
+HAM | Lewis Hamilton | MERCEDES
+VET | Sebastian Vettel | FERRARI
+VER | Max Verstappen | RED BULL RACING TAG HEUER
+RIC | Daniel Ricciardo | RED BULL RACING TAG HEUER
+RAI | Kimi Räikkönen | FERRARI
+BOT | Valtteri Bottas | MERCEDES
+GRO | Romain Grosjean | HAAS FERRARI
+MAG | Kevin Magnussen | HAAS FERRARI
+SAI | Carlos Sainz | RENAULT
+LEC | Charles Leclerc | SAUBER FERRARI
+PER | Sergio Perez | FORCE INDIA MERCEDES
+OCO | Esteban Ocon | FORCE INDIA MERCEDES
+STR | Lance Stroll | WILLIAMS MERCEDES
+ALO | Fernando Alonso | MCLAREN RENAULT
+VAN | Stoffel Vandoorne | MCLAREN RENAULT
+GAS | Pierre Gasly | SCUDERIA TORO ROSSO HONDA
+HUL | Nico Hulkenberg | RENAULT
+ERI | Marcus Ericsson | SAUBER FERRARI
+HAR | Brendon Hartley | SCUDERIA TORO ROSSO HONDA
+SIR | Sergey Sirotkin | WILLIAMS MERCEDES
