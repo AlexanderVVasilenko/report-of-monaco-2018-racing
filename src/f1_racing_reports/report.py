@@ -3,6 +3,7 @@ from datetime import datetime
 from argparse import ArgumentParser
 from operator import add
 
+
 @dataclass
 class RacerData:
     name: str
@@ -73,13 +74,16 @@ def print_report(fastest_racers: list[RacerData], bottom_racers: list[RacerData]
     else:
         print("Remaining Racers:")
         for i in range(len(bottom_racers), 0, -1):
-            print(f"{i + 15}. {bottom_racers[i-1].name} | {bottom_racers[i-1].team} | {bottom_racers[i-1].lap_time}")
+            print(
+                f"{i + 15}. {bottom_racers[i - 1].name} | {bottom_racers[i - 1].team} | {bottom_racers[i - 1].lap_time}"
+            )
 
         print("\n" + "-" * 70 + "\n")
 
         print("Top 15 Racers:")
         for i in range(len(fastest_racers), 0, -1):
-            print(f"{i}. {fastest_racers[i-1].name} | {fastest_racers[i-1].team} | {fastest_racers[i-1].lap_time}")
+            print(
+                f"{i}. {fastest_racers[i - 1].name} | {fastest_racers[i - 1].team} | {fastest_racers[i - 1].lap_time}")
 
 
 # Function to handle command-line arguments
@@ -110,7 +114,7 @@ def show_driver_statistics(name: str) -> None:
     racers = add(*main())
     for i, racer_data in enumerate(racers):
         if racer_data.name == name:
-            print(f"{i+1}. {racer_data.name} | {racer_data.team} | {racer_data.lap_time}")
+            print(f"{i + 1}. {racer_data.name} | {racer_data.team} | {racer_data.lap_time}")
 
 
 # Main script
