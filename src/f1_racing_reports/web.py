@@ -44,7 +44,7 @@ def driver_list():
     if order == "asc":
         sorted_racers = sorted(abbreviations, key=lambda x: x[1])
     elif order == "desc":
-        sorted_racers = sorted(abbreviations, key=lambda x: x[1])
+        sorted_racers = sorted(abbreviations, key=lambda x: x[1], reverse=True)
     else:
         return redirect(url_for("drivers"))
 
