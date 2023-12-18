@@ -6,6 +6,7 @@ from operator import add
 
 @dataclass
 class RacerData:
+    driver_id: str
     name: str
     team: str
     lap_time: str
@@ -13,7 +14,7 @@ class RacerData:
 
 # Load abbreviations from the file
 def load_abbreviations(file_path: str) -> list[list[str]]:
-    with open(file_path, "r") as abbreviations_file:
+    with open(file_path, "r", encoding="UTF-8") as abbreviations_file:
         return [row.strip().split("|") for row in abbreviations_file]
 
 
@@ -35,6 +36,7 @@ def parse_logs(start_file: str, end_file: str, abbreviations_ls: list[list[str]]
                 lap_time = str(end_time - start_time)
 
                 racers[racer_code] = RacerData(
+                    driver_id=racer_code,
                     name=racer_info[0],
                     team=racer_info[1],
                     lap_time=lap_time
@@ -60,30 +62,45 @@ def get_racer_info(abbreviation: str, racers: list[list[str]]) -> list[str]:
 
 
 # Function to print the report
-def print_report(fastest_racers: list[RacerData], bottom_racers: list[RacerData], is_reversed=False) -> None:
+def print_report(fastest_racers: list[RacerData], bottom_racers: list[RacerData], is_reversed=False) -> str:
+    result = str()
     if not is_reversed:
         print("Top 15 Racers:")
+        result += "Top 15 Racers:\n"
         for i, racer_data in enumerate(fastest_racers, start=1):
             print(f"{i}. {racer_data.name} | {racer_data.team} | {racer_data.lap_time}")
+            result += f"{i}. {racer_data.name} | {racer_data.team} | {racer_data.lap_time}\n"
 
         print("\n" + '-' * 70 + "\n")
+        result += "\n" + '-' * 70 + "\n" + "\n"
 
         print("Remaining Racers:")
+        result += "Remaining Racers:\n"
         for i, racer_data in enumerate(bottom_racers, start=16):
             print(f"{i}. {racer_data.name} | {racer_data.team} | {racer_data.lap_time}")
+            result += f"{i}. {racer_data.name} | {racer_data.team} | {racer_data.lap_time}\n"
     else:
         print("Remaining Racers:")
+        result += "Remaining Racers:\n"
         for i in range(len(bottom_racers), 0, -1):
             print(
                 f"{i + 15}. {bottom_racers[i - 1].name} | {bottom_racers[i - 1].team} | {bottom_racers[i - 1].lap_time}"
             )
+            result += \
+                f"{i + 15}. {bottom_racers[i - 1].name} | {bottom_racers[i - 1].team} | " \
+                f"{bottom_racers[i - 1].lap_time}\n"
 
         print("\n" + "-" * 70 + "\n")
+        result += "\n" + "-" * 70 + "\n" + "\n"
 
         print("Top 15 Racers:")
+        result += "Top 15 Racers:\n"
         for i in range(len(fastest_racers), 0, -1):
             print(
                 f"{i}. {fastest_racers[i - 1].name} | {fastest_racers[i - 1].team} | {fastest_racers[i - 1].lap_time}")
+            result += f"{i}. {fastest_racers[i - 1].name} | {fastest_racers[i - 1].team} | " \
+                      f"{fastest_racers[i - 1].lap_time}\n"
+    return result
 
 
 # Function to handle command-line arguments
@@ -119,6 +136,7 @@ def show_driver_statistics(name: str) -> None:
 
 # Main script
 if __name__ == "__main__":
+    show_driver_statistics("SVF")
     parser = handle_arguments()
     args = parser.parse_args()
 

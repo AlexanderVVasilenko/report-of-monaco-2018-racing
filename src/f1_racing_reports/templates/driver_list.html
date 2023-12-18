@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Driver List</title>
+</head>
+<body>
+  <h1>Driver List</h1>
+    <ul>
+        {% for racer in racers %}
+            <li>{{ racer[0] }} | {{ racer[1] }} | {{ racer[2] }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

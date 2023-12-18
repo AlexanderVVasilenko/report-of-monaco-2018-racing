@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Racing Report</title>
+</head>
+<body>
+    <h1>Racing Report</h1>
+    <ul>
+        {% for racer in racers %}
+            <li>{{ racer.name }} | {{racer.team }} | {{racer.lap_time }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
