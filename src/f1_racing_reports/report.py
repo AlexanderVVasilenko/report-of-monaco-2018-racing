@@ -9,11 +9,12 @@ class RacerData:
     name: str
     team: str
     lap_time: str
+    driver_id: str
 
 
 # Load abbreviations from the file
 def load_abbreviations(file_path: str) -> list[list[str]]:
-    with open(file_path, "r") as abbreviations_file:
+    with open(file_path, "r", encoding="UTF-8") as abbreviations_file:
         return [row.strip().split("|") for row in abbreviations_file]
 
 
@@ -37,7 +38,8 @@ def parse_logs(start_file: str, end_file: str, abbreviations_ls: list[list[str]]
                 racers[racer_code] = RacerData(
                     name=racer_info[0],
                     team=racer_info[1],
-                    lap_time=lap_time
+                    lap_time=lap_time,
+                    driver_id=racer_code
                 )
 
     # Sort racers by lap time in ascending order
@@ -60,30 +62,45 @@ def get_racer_info(abbreviation: str, racers: list[list[str]]) -> list[str]:
 
 
 # Function to print the report
-def print_report(fastest_racers: list[RacerData], bottom_racers: list[RacerData], is_reversed=False) -> None:
+def print_report(fastest_racers: list[RacerData], bottom_racers: list[RacerData], is_reversed=False) -> str:
+    result = str()
     if not is_reversed:
         print("Top 15 Racers:")
+        result += "Top 15 Racers:\n"
         for i, racer_data in enumerate(fastest_racers, start=1):
             print(f"{i}. {racer_data.name} | {racer_data.team} | {racer_data.lap_time}")
+            result += f"{i}. {racer_data.name} | {racer_data.team} | {racer_data.lap_time}\n"
 
         print("\n" + '-' * 70 + "\n")
+        result += "\n" + '-' * 70 + "\n" + "\n"
 
         print("Remaining Racers:")
+        result += "Remaining Racers:\n"
         for i, racer_data in enumerate(bottom_racers, start=16):
             print(f"{i}. {racer_data.name} | {racer_data.team} | {racer_data.lap_time}")
+            result += f"{i}. {racer_data.name} | {racer_data.team} | {racer_data.lap_time}\n"
     else:
         print("Remaining Racers:")
+        result += "Remaining Racers:\n"
         for i in range(len(bottom_racers), 0, -1):
             print(
                 f"{i + 15}. {bottom_racers[i - 1].name} | {bottom_racers[i - 1].team} | {bottom_racers[i - 1].lap_time}"
             )
+            result += \
+                f"{i + 15}. {bottom_racers[i - 1].name} | {bottom_racers[i - 1].team} | " \
+                f"{bottom_racers[i - 1].lap_time}\n"
 
         print("\n" + "-" * 70 + "\n")
+        result += "\n" + "-" * 70 + "\n" + "\n"
 
         print("Top 15 Racers:")
+        result += "Top 15 Racers:\n"
         for i in range(len(fastest_racers), 0, -1):
             print(
                 f"{i}. {fastest_racers[i - 1].name} | {fastest_racers[i - 1].team} | {fastest_racers[i - 1].lap_time}")
+            result += f"{i}. {fastest_racers[i - 1].name} | {fastest_racers[i - 1].team} | " \
+                      f"{fastest_racers[i - 1].lap_time}\n"
+    return result
 
 
 # Function to handle command-line arguments
