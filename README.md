@@ -17,4 +17,4 @@ Formula 1 Racing Analytics is a Python package that provides tools for analyzing
 ## Installation
 
 ```bash
-pip install f1_racing_reports
+py -m pip install --index-url https://test.pypi.org/simple --no-deps f1_racing_reports
