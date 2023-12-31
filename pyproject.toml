@@ -1,0 +1,21 @@
+[project]
+name = "f1_racing_reports"
+version = "0.0.2"
+authors = [
+  { name="Oleksandr Vasylenko", email="alexander_vasilenko@outlook.com" },
+]
+maintainers = [
+  { name="Vit Melnychuk", email="playersoft1999@gmail.com" },
+]
+description = "A Python package for analyzing Formula 1 racing data and generating reports."
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/AlexanderVVasilenko/report-of-monaco-2018-racing/"
+Issues = "https://github.com/AlexanderVVasilenko/report-of-monaco-2018-racing/issues"
