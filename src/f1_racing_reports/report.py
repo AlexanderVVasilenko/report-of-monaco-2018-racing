@@ -109,7 +109,7 @@ def handle_arguments():
     return arg_parser
 
 
-def main() -> tuple[list[RacerData], list[RacerData]]:
+def initialize_data() -> tuple[list[RacerData], list[RacerData]]:
     abbreviations_file_path = "abbreviations.txt"
     start_log_file = "start.log"
     end_log_file = "end.log"
@@ -119,12 +119,12 @@ def main() -> tuple[list[RacerData], list[RacerData]]:
 
 
 def show_driver_list(ls_order: str | None) -> None:
-    top_racers, remaining_racers = main()
+    top_racers, remaining_racers = initialize_data()
     print_report(top_racers, remaining_racers, is_reversed=True if ls_order == "desc" else False)
 
 
 def show_driver_statistics(driver_id: str) -> None:
-    racers = add(*main())
+    racers = add(*initialize_data())
     for i, racer_data in enumerate(racers):
         if racer_data.driver_id == driver_id:
             result = f"{i + 1}. {racer_data.name} | {racer_data.team} | {racer_data.lap_time}"
