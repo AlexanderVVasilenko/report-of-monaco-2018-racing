@@ -12,15 +12,14 @@ class RacerData:
     driver_id: str
 
 
-# Load abbreviations from the file
 def load_abbreviations(file_path: str) -> list[list[str]]:
     with open(file_path, "r", encoding="UTF-8") as abbreviations_file:
         return [row.strip().split("|") for row in abbreviations_file]
 
 
-# Function to parse the log files and extract relevant information
 def parse_logs(start_file: str, end_file: str, abbreviations_ls: list[list[str]]) -> \
         tuple[list[RacerData], list[RacerData]]:
+    """Function to parse the log files and extract relevant information"""
     racers: dict[str, RacerData] = {}
 
     with open(start_file, 'r') as start_log, open(end_file, 'r') as end_log:
@@ -48,62 +47,59 @@ def parse_logs(start_file: str, end_file: str, abbreviations_ls: list[list[str]]
     return [racer[1] for racer in sorted_racers[:15]], [racer[1] for racer in sorted_racers[15:]]
 
 
-# Function to parse a log line into code and time
 def parse_log_line(log_line: str) -> list[str]:
+    """Function to parse a log line into code and time"""
     code, time = log_line[:3], log_line[3:].strip()
     return [code, time] if len(code) == 3 and time else []
 
 
-# Function to decode racer abbreviation
+#
 def get_racer_info(abbreviation: str, racers: list[list[str]]) -> list[str]:
+    """Function to decode racer abbreviation"""
     for racer in racers:
         if racer[0].strip() == abbreviation:
             return [racer[1].strip(), racer[2].strip()]
 
 
-# Function to print the report
-def print_report(fastest_racers: list[RacerData], bottom_racers: list[RacerData], is_reversed=False) -> str:
-    result = str()
-    if not is_reversed:
-        print("Top 15 Racers:")
-        result += "Top 15 Racers:\n"
-        for i, racer_data in enumerate(fastest_racers, start=1):
-            print(f"{i}. {racer_data.name} | {racer_data.team} | {racer_data.lap_time}")
-            result += f"{i}. {racer_data.name} | {racer_data.team} | {racer_data.lap_time}\n"
-
-        print("\n" + '-' * 70 + "\n")
-        result += "\n" + '-' * 70 + "\n" + "\n"
-
-        print("Remaining Racers:")
-        result += "Remaining Racers:\n"
-        for i, racer_data in enumerate(bottom_racers, start=16):
-            print(f"{i}. {racer_data.name} | {racer_data.team} | {racer_data.lap_time}")
-            result += f"{i}. {racer_data.name} | {racer_data.team} | {racer_data.lap_time}\n"
-    else:
-        print("Remaining Racers:")
-        result += "Remaining Racers:\n"
-        for i in range(len(bottom_racers), 0, -1):
-            print(
-                f"{i + 15}. {bottom_racers[i - 1].name} | {bottom_racers[i - 1].team} | {bottom_racers[i - 1].lap_time}"
-            )
-            result += \
-                f"{i + 15}. {bottom_racers[i - 1].name} | {bottom_racers[i - 1].team} | " \
-                f"{bottom_racers[i - 1].lap_time}\n"
-
-        print("\n" + "-" * 70 + "\n")
-        result += "\n" + "-" * 70 + "\n" + "\n"
-
-        print("Top 15 Racers:")
-        result += "Top 15 Racers:\n"
-        for i in range(len(fastest_racers), 0, -1):
-            print(
-                f"{i}. {fastest_racers[i - 1].name} | {fastest_racers[i - 1].team} | {fastest_racers[i - 1].lap_time}")
-            result += f"{i}. {fastest_racers[i - 1].name} | {fastest_racers[i - 1].team} | " \
-                      f"{fastest_racers[i - 1].lap_time}\n"
+def print_top_15_racers(fastest_racers: list[RacerData], is_reversed: bool) -> str:
+    result = "Top 15 Racers:\n"
+    if is_reversed:
+        fastest_racers = fastest_racers[::-1]
+    for i, racer_data in enumerate(fastest_racers, start=1):
+        if is_reversed:
+            i = 16 - i
+        result += f"{i}. {racer_data.name} | {racer_data.team} | {racer_data.lap_time}\n"
     return result
 
 
-# Function to handle command-line arguments
+def print_remaining_racers(bottom_racers: list[RacerData], is_reversed=True) -> str:
+    result = "Remaining Racers:\n"
+    for i in range(len(bottom_racers)):
+        if is_reversed:
+            i = len(bottom_racers) - i - 1
+        result += f"{i + 16}. {bottom_racers[i].name} | {bottom_racers[i].team} |" \
+                  f" {bottom_racers[i].lap_time}\n"
+    return result
+
+
+def print_report(fastest_racers: list[RacerData], bottom_racers: list[RacerData], is_reversed=False) -> None:
+    result = str()
+    if not is_reversed:
+        result += print_top_15_racers(fastest_racers, is_reversed)
+        result += "\n" + '-' * 70 + "\n" + "\n"
+        result += print_remaining_racers(bottom_racers, is_reversed)
+    else:
+        result += print_remaining_racers(bottom_racers, is_reversed)
+        result += "\n" + "-" * 70 + "\n" + "\n"
+        result += print_top_15_racers(fastest_racers, is_reversed)
+
+    try:
+        print(result)
+    except UnicodeEncodeError:
+        print(result.encode('utf-8').decode('cp1251', errors='replace'))
+#
+
+
 def handle_arguments():
     arg_parser = ArgumentParser(description="Formula 1 Racing Report")
     arg_parser.add_argument("--drivers", action="store_true", help="Show list of drivers")
@@ -127,25 +123,26 @@ def show_driver_list(ls_order: str | None) -> None:
     print_report(top_racers, remaining_racers, is_reversed=True if ls_order == "desc" else False)
 
 
-def show_driver_statistics(name: str) -> None:
+def show_driver_statistics(driver_id: str) -> None:
     racers = add(*main())
     for i, racer_data in enumerate(racers):
-        if racer_data.name == name:
-            print(f"{i + 1}. {racer_data.name} | {racer_data.team} | {racer_data.lap_time}")
+        if racer_data.driver_id == driver_id:
+            result = f"{i + 1}. {racer_data.name} | {racer_data.team} | {racer_data.lap_time}"
+            try:
+                print(result)
+            except UnicodeEncodeError:
+                print(result.encode('utf-8').decode('cp1251', errors='replace'))
 
 
-# Main script
 if __name__ == "__main__":
     parser = handle_arguments()
     args = parser.parse_args()
 
     if args.drivers:
         order = args.order if args.order else "asc"
-        # Call the function to show the list of drivers with the specified order
         show_driver_list(order)
 
     elif args.driver:
-        # Call the function to show statistics about the specified driver
         show_driver_statistics(args.driver)
 
     else:
